@@ -48,20 +48,20 @@ export default function AuthPage({ onAuthSuccess }) {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-r from-purple-500 via-pink-500 to-red-500 animate-gradient-x p-4">
-      <div className="relative w-full max-w-4xl bg-white rounded-2xl shadow-2xl overflow-hidden flex transition-all duration-700">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-r from-purple-500 via-pink-500 to-red-500 animate-gradient-x p-6">
+      <div className="relative w-full max-w-6xl bg-white rounded-3xl shadow-2xl overflow-hidden flex transition-all duration-700 flex-col md:flex-row">
         
-        {/* Forms */}
+        {/* Sign In Form */}
         <div
-          className={`absolute top-0 left-0 w-1/2 h-full p-10 transition-transform duration-700 ${
+          className={`absolute top-0 left-0 w-full md:w-1/2 h-full p-12 transition-transform duration-700 ${
             isSignUp ? "-translate-x-full opacity-0" : "translate-x-0 opacity-100"
           } flex flex-col justify-center`}
         >
-          <h2 className="text-3xl font-bold mb-6 text-gray-800">Sign In</h2>
+          <h2 className="text-4xl font-bold mb-8 text-gray-800">Sign In</h2>
           <input
             type="email"
             placeholder="Email"
-            className="w-full p-4 mb-3 border rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500 transition"
+            className="w-full p-5 mb-4 border rounded-2xl focus:outline-none focus:ring-2 focus:ring-purple-500 transition text-lg"
             value={signinEmail}
             onChange={(e) => setSigninEmail(e.target.value)}
           />
@@ -69,29 +69,30 @@ export default function AuthPage({ onAuthSuccess }) {
           <input
             type="password"
             placeholder="Password"
-            className="w-full p-4 mb-3 border rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500 transition"
+            className="w-full p-5 mb-4 border rounded-2xl focus:outline-none focus:ring-2 focus:ring-purple-500 transition text-lg"
             value={signinPassword}
             onChange={(e) => setSigninPassword(e.target.value)}
           />
           {errors.signinPassword && <p className="text-red-500 text-sm mb-2">{errors.signinPassword}</p>}
           <button
             onClick={handleSignIn}
-            className="mt-5 w-full p-4 bg-purple-600 text-white rounded-xl hover:bg-purple-700 transition transform hover:scale-105"
+            className="mt-6 w-full p-5 bg-purple-600 text-white rounded-2xl hover:bg-purple-700 transition transform hover:scale-105 text-lg"
           >
             Sign In
           </button>
         </div>
 
+        {/* Sign Up Form */}
         <div
-          className={`absolute top-0 left-0 w-1/2 h-full p-10 transition-transform duration-700 ${
+          className={`absolute top-0 left-0 w-full md:w-1/2 h-full p-12 transition-transform duration-700 ${
             isSignUp ? "translate-x-0 opacity-100 z-20" : "translate-x-full opacity-0"
           } flex flex-col justify-center`}
         >
-          <h2 className="text-3xl font-bold mb-6 text-gray-800">Sign Up</h2>
+          <h2 className="text-4xl font-bold mb-8 text-gray-800">Sign Up</h2>
           <input
             type="text"
             placeholder="Name"
-            className="w-full p-4 mb-3 border rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500 transition"
+            className="w-full p-5 mb-4 border rounded-2xl focus:outline-none focus:ring-2 focus:ring-purple-500 transition text-lg"
             value={signupName}
             onChange={(e) => setSignupName(e.target.value)}
           />
@@ -99,7 +100,7 @@ export default function AuthPage({ onAuthSuccess }) {
           <input
             type="email"
             placeholder="Email"
-            className="w-full p-4 mb-3 border rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500 transition"
+            className="w-full p-5 mb-4 border rounded-2xl focus:outline-none focus:ring-2 focus:ring-purple-500 transition text-lg"
             value={signupEmail}
             onChange={(e) => setSignupEmail(e.target.value)}
           />
@@ -107,26 +108,26 @@ export default function AuthPage({ onAuthSuccess }) {
           <input
             type="password"
             placeholder="Password"
-            className="w-full p-4 mb-3 border rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500 transition"
+            className="w-full p-5 mb-4 border rounded-2xl focus:outline-none focus:ring-2 focus:ring-purple-500 transition text-lg"
             value={signupPassword}
             onChange={(e) => setSignupPassword(e.target.value)}
           />
           {errors.signupPassword && <p className="text-red-500 text-sm mb-2">{errors.signupPassword}</p>}
           <button
             onClick={handleSignUp}
-            className="mt-5 w-full p-4 bg-pink-600 text-white rounded-xl hover:bg-pink-700 transition transform hover:scale-105"
+            className="mt-6 w-full p-5 bg-pink-600 text-white rounded-2xl hover:bg-pink-700 transition transform hover:scale-105 text-lg"
           >
             Sign Up
           </button>
         </div>
 
         {/* Toggle Panel */}
-        <div className="w-1/2 bg-gradient-to-tr from-purple-700 to-pink-500 text-white flex flex-col justify-center items-center p-10 transition-all duration-700">
-          <h2 className="text-3xl font-bold mb-4">{isSignUp ? "Welcome Back!" : "Hello, Friend!"}</h2>
-          <p className="mb-6 text-center">{isSignUp ? "Sign in to continue" : "Create an account to get started"}</p>
+        <div className="w-full md:w-1/2 bg-gradient-to-tr from-purple-700 to-pink-500 text-white flex flex-col justify-center items-center p-12 transition-all duration-700">
+          <h2 className="text-4xl font-bold mb-6 text-center">{isSignUp ? "Welcome Back!" : "Hello, Friend!"}</h2>
+          <p className="mb-8 text-center text-lg">{isSignUp ? "Sign in to continue" : "Create an account to get started"}</p>
           <button
             onClick={() => setIsSignUp(!isSignUp)}
-            className="px-6 py-3 border-2 border-white rounded-full hover:bg-white hover:text-gray-800 transition transform hover:scale-105"
+            className="px-8 py-4 border-2 border-white rounded-full hover:bg-white hover:text-gray-800 transition transform hover:scale-105 text-lg"
           >
             {isSignUp ? "Sign In" : "Sign Up"}
           </button>
