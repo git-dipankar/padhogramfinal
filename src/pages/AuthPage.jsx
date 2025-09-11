@@ -48,59 +48,20 @@ export default function AuthPage({ onAuthSuccess }) {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100 p-4">
-      <div className="relative w-full max-w-4xl bg-white rounded-lg shadow-lg overflow-hidden flex">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-r from-purple-500 via-pink-500 to-red-500 animate-gradient-x p-4">
+      <div className="relative w-full max-w-4xl bg-white rounded-2xl shadow-2xl overflow-hidden flex transition-all duration-700">
         
-        {/* Sign Up Form */}
+        {/* Forms */}
         <div
-          className={`absolute top-0 left-0 w-1/2 h-full p-8 transition-transform duration-500 ${
-            isSignUp ? "translate-x-full z-10" : "z-0"
-          }`}
+          className={`absolute top-0 left-0 w-1/2 h-full p-10 transition-transform duration-700 ${
+            isSignUp ? "-translate-x-full opacity-0" : "translate-x-0 opacity-100"
+          } flex flex-col justify-center`}
         >
-          <h2 className="text-2xl font-bold mb-6 text-gray-700">Create Account</h2>
-          <input
-            type="text"
-            placeholder="Name"
-            className="w-full p-3 mb-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-400"
-            value={signupName}
-            onChange={(e) => setSignupName(e.target.value)}
-          />
-          {errors.signupName && <p className="text-red-500 text-sm mb-2">{errors.signupName}</p>}
+          <h2 className="text-3xl font-bold mb-6 text-gray-800">Sign In</h2>
           <input
             type="email"
             placeholder="Email"
-            className="w-full p-3 mb-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-400"
-            value={signupEmail}
-            onChange={(e) => setSignupEmail(e.target.value)}
-          />
-          {errors.signupEmail && <p className="text-red-500 text-sm mb-2">{errors.signupEmail}</p>}
-          <input
-            type="password"
-            placeholder="Password"
-            className="w-full p-3 mb-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-400"
-            value={signupPassword}
-            onChange={(e) => setSignupPassword(e.target.value)}
-          />
-          {errors.signupPassword && <p className="text-red-500 text-sm mb-2">{errors.signupPassword}</p>}
-          <button
-            onClick={handleSignUp}
-            className="w-full mt-4 p-3 bg-blue-600 text-white rounded hover:bg-blue-700 transition"
-          >
-            Sign Up
-          </button>
-        </div>
-
-        {/* Sign In Form */}
-        <div
-          className={`absolute top-0 left-0 w-1/2 h-full p-8 transition-transform duration-500 ${
-            isSignUp ? "z-0" : "z-10"
-          }`}
-        >
-          <h2 className="text-2xl font-bold mb-6 text-gray-700">Sign In</h2>
-          <input
-            type="email"
-            placeholder="Email"
-            className="w-full p-3 mb-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-400"
+            className="w-full p-4 mb-3 border rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500 transition"
             value={signinEmail}
             onChange={(e) => setSigninEmail(e.target.value)}
           />
@@ -108,39 +69,82 @@ export default function AuthPage({ onAuthSuccess }) {
           <input
             type="password"
             placeholder="Password"
-            className="w-full p-3 mb-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-400"
+            className="w-full p-4 mb-3 border rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500 transition"
             value={signinPassword}
             onChange={(e) => setSigninPassword(e.target.value)}
           />
           {errors.signinPassword && <p className="text-red-500 text-sm mb-2">{errors.signinPassword}</p>}
           <button
             onClick={handleSignIn}
-            className="w-full mt-4 p-3 bg-green-600 text-white rounded hover:bg-green-700 transition"
+            className="mt-5 w-full p-4 bg-purple-600 text-white rounded-xl hover:bg-purple-700 transition transform hover:scale-105"
           >
             Sign In
           </button>
         </div>
 
+        <div
+          className={`absolute top-0 left-0 w-1/2 h-full p-10 transition-transform duration-700 ${
+            isSignUp ? "translate-x-0 opacity-100 z-20" : "translate-x-full opacity-0"
+          } flex flex-col justify-center`}
+        >
+          <h2 className="text-3xl font-bold mb-6 text-gray-800">Sign Up</h2>
+          <input
+            type="text"
+            placeholder="Name"
+            className="w-full p-4 mb-3 border rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500 transition"
+            value={signupName}
+            onChange={(e) => setSignupName(e.target.value)}
+          />
+          {errors.signupName && <p className="text-red-500 text-sm mb-2">{errors.signupName}</p>}
+          <input
+            type="email"
+            placeholder="Email"
+            className="w-full p-4 mb-3 border rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500 transition"
+            value={signupEmail}
+            onChange={(e) => setSignupEmail(e.target.value)}
+          />
+          {errors.signupEmail && <p className="text-red-500 text-sm mb-2">{errors.signupEmail}</p>}
+          <input
+            type="password"
+            placeholder="Password"
+            className="w-full p-4 mb-3 border rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500 transition"
+            value={signupPassword}
+            onChange={(e) => setSignupPassword(e.target.value)}
+          />
+          {errors.signupPassword && <p className="text-red-500 text-sm mb-2">{errors.signupPassword}</p>}
+          <button
+            onClick={handleSignUp}
+            className="mt-5 w-full p-4 bg-pink-600 text-white rounded-xl hover:bg-pink-700 transition transform hover:scale-105"
+          >
+            Sign Up
+          </button>
+        </div>
+
         {/* Toggle Panel */}
-        <div className="w-1/2 bg-gradient-to-tr from-blue-500 to-purple-600 text-white flex flex-col items-center justify-center p-8 relative z-20">
-          <h2 className="text-2xl font-bold mb-4">Welcome!</h2>
-          <p className="mb-6">Switch between Sign In and Sign Up</p>
-          <div className="flex gap-4">
-            <button
-              onClick={() => setIsSignUp(false)}
-              className="px-4 py-2 border border-white rounded hover:bg-white hover:text-black transition"
-            >
-              Sign In
-            </button>
-            <button
-              onClick={() => setIsSignUp(true)}
-              className="px-4 py-2 border border-white rounded hover:bg-white hover:text-black transition"
-            >
-              Sign Up
-            </button>
-          </div>
+        <div className="w-1/2 bg-gradient-to-tr from-purple-700 to-pink-500 text-white flex flex-col justify-center items-center p-10 transition-all duration-700">
+          <h2 className="text-3xl font-bold mb-4">{isSignUp ? "Welcome Back!" : "Hello, Friend!"}</h2>
+          <p className="mb-6 text-center">{isSignUp ? "Sign in to continue" : "Create an account to get started"}</p>
+          <button
+            onClick={() => setIsSignUp(!isSignUp)}
+            className="px-6 py-3 border-2 border-white rounded-full hover:bg-white hover:text-gray-800 transition transform hover:scale-105"
+          >
+            {isSignUp ? "Sign In" : "Sign Up"}
+          </button>
         </div>
       </div>
+
+      {/* Tailwind gradient animation */}
+      <style jsx>{`
+        @keyframes gradient-x {
+          0% { background-position: 0% 50%; }
+          50% { background-position: 100% 50%; }
+          100% { background-position: 0% 50%; }
+        }
+        .animate-gradient-x {
+          background-size: 200% 200%;
+          animation: gradient-x 10s ease infinite;
+        }
+      `}</style>
     </div>
   );
 }
