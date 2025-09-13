@@ -2,193 +2,136 @@ import React, { useState } from "react";
 
 const subjects = {
   Math: [
-    { q: "2 + 2 = ?", a: "4" },
-    { q: "Square root of 16?", a: "4" },
-    { q: "10 × 5 = ?", a: "50" },
-    { q: "12 ÷ 3 = ?", a: "4" },
-    { q: "What is Pi (approx)?", a: "3.14" },
-    { q: "Area of square with side 4?", a: "16" },
-    { q: "Derivative of x²?", a: "2x" },
-    { q: "5³ = ?", a: "125" },
-    { q: "100 ÷ 25 = ?", a: "4" },
-    { q: "7 × 8 = ?", a: "56" },
-    { q: "Integral of 1/x dx?", a: "lnx" },
+    { front: "Pythagoras Theorem", back: "a² + b² = c²" },
+    { front: "Area of Circle", back: "πr²" },
+    { front: "Volume of Sphere", back: "4/3 πr³" },
+    { front: "Derivative of x²", back: "2x" },
+    { front: "Integral of 1/x", back: "ln|x|" },
+    { front: "Slope Formula", back: "(y2-y1)/(x2-x1)" },
+    { front: "Area of Triangle", back: "½ × base × height" },
+    { front: "Quadratic Formula", back: "(-b ± √(b²-4ac)) / 2a" },
+    { front: "Simple Interest", back: "SI = PRT/100" },
+    { front: "Compound Interest", back: "A = P(1 + r/n)ⁿᵗ" },
+    { front: "Log Rule", back: "log(ab) = loga + logb" },
   ],
   Science: [
-    { q: "Chemical symbol of water?", a: "H2O" },
-    { q: "Planet known as Red Planet?", a: "Mars" },
-    { q: "Speed of light (m/s)?", a: "3e8" },
-    { q: "Gas we breathe in?", a: "Oxygen" },
-    { q: "Atomic number of Carbon?", a: "6" },
-    { q: "Boiling point of water (°C)?", a: "100" },
-    { q: "Center of atom?", a: "Nucleus" },
-    { q: "Earth revolves around?", a: "Sun" },
-    { q: "Smallest unit of life?", a: "Cell" },
-    { q: "Force formula?", a: "F=ma" },
-    { q: "Acceleration due to gravity (m/s²)?", a: "9.8" },
+    { front: "Speed of Light", back: "3 × 10⁸ m/s" },
+    { front: "Acceleration due to Gravity", back: "9.8 m/s²" },
+    { front: "Avogadro Number", back: "6.022 × 10²³" },
+    { front: "Boiling Point of Water", back: "100 °C" },
+    { front: "Freezing Point of Water", back: "0 °C" },
+    { front: "Electron Charge", back: "1.6 × 10⁻¹⁹ C" },
+    { front: "Newton’s 2nd Law", back: "F = ma" },
+    { front: "Einstein Equation", back: "E = mc²" },
+    { front: "Earth’s Atmosphere Layers", back: "Troposphere, Stratosphere, ..." },
+    { front: "pH Neutral", back: "7" },
+    { front: "Human DNA Pairs", back: "3 billion" },
+  ],
+  English: [
+    { front: "Synonym of Happy", back: "Joyful" },
+    { front: "Antonym of Big", back: "Small" },
+    { front: "Past Tense of Run", back: "Ran" },
+    { front: "Collective Noun: Cows", back: "Herd" },
+    { front: "Opposite of Brave", back: "Coward" },
+    { front: "Plural of Child", back: "Children" },
+    { front: "Figure of Speech: 'As brave as a lion'", back: "Simile" },
+    { front: "Author of Hamlet", back: "William Shakespeare" },
+    { front: "One word for 'Fear of Books'", back: "Bibliophobia" },
+    { front: "Opposite of Ancient", back: "Modern" },
+    { front: "Synonym of Intelligent", back: "Smart" },
+  ],
+  Geography: [
+    { front: "Capital of India", back: "New Delhi" },
+    { front: "Largest Ocean", back: "Pacific Ocean" },
+    { front: "Tallest Mountain", back: "Mount Everest" },
+    { front: "Longest River", back: "Nile" },
+    { front: "Smallest Country", back: "Vatican City" },
+    { front: "Largest Desert", back: "Sahara Desert" },
+    { front: "7 Continents", back: "Asia, Africa, ..." },
+    { front: "Hottest Place on Earth", back: "Death Valley" },
+    { front: "Coldest Continent", back: "Antarctica" },
+    { front: "Country with Most Population", back: "India" },
+    { front: "Ozone Layer Location", back: "Stratosphere" },
   ],
 };
 
-const KnowledgeRace = () => {
+const Flashcards = () => {
   const [subject, setSubject] = useState("Math");
-  const [playerPos, setPlayerPos] = useState(0);
-  const [currentQ, setCurrentQ] = useState(0);
-  const [answer, setAnswer] = useState("");
-  const [winner, setWinner] = useState(null);
-  const [pothole, setPothole] = useState(null);
-  const [fallen, setFallen] = useState(false);
-  const [message, setMessage] = useState("");
+  const [index, setIndex] = useState(0);
+  const [flipped, setFlipped] = useState(false);
 
-  const questions = subjects[subject];
+  const cards = subjects[subject];
 
-  const handleSubmit = () => {
-    if (winner || fallen) return;
-
-    const correct =
-      answer.trim().toLowerCase() === questions[currentQ].a.toLowerCase();
-
-    if (correct) {
-      setMessage("⚡ Correct! Speed Boost!");
-      movePlayer(2);
-    } else {
-      setMessage("🕳️ Oh no! You fell into a pothole!");
-      setPothole(playerPos + 1);
-      setFallen(true);
-    }
-
-    setAnswer("");
-    setCurrentQ((prev) => (prev + 1) % questions.length);
+  const handleNext = () => {
+    setFlipped(false);
+    setIndex((prev) => (prev + 1) % cards.length);
   };
 
-  const movePlayer = (steps) => {
-    setPlayerPos((prev) => {
-      const newPos = prev + steps;
-      if (newPos >= 10) {
-        setWinner("You");
-      }
-      return Math.min(newPos, 10);
-    });
-  };
-
-  const resetGame = () => {
-    setPlayerPos(0);
-    setCurrentQ(0);
-    setAnswer("");
-    setWinner(null);
-    setMessage("");
-    setPothole(null);
-    setFallen(false);
+  const handlePrev = () => {
+    setFlipped(false);
+    setIndex((prev) => (prev - 1 + cards.length) % cards.length);
   };
 
   return (
-    <div className="flex flex-col items-center p-6 min-h-screen bg-gradient-to-br from-yellow-100 to-blue-200">
-      <h1 className="text-3xl font-bold mb-6">🏁 Knowledge Race with Potholes</h1>
+    <div className="flex flex-col items-center min-h-screen p-6 bg-gradient-to-r from-blue-200 to-green-200">
+      <h1 className="text-3xl font-bold mb-6">📚 Flashcards</h1>
 
       {/* Subject Selector */}
-      <div className="mb-6">
-        <select
-          value={subject}
-          onChange={(e) => {
-            setSubject(e.target.value);
-            resetGame();
-          }}
-          className="px-4 py-2 border rounded-lg"
-        >
-          {Object.keys(subjects).map((subj) => (
-            <option key={subj} value={subj}>
-              {subj}
-            </option>
-          ))}
-        </select>
-      </div>
-
-      {/* Track */}
-      <div className="relative w-full max-w-3xl h-32 border-4 border-gray-600 rounded-lg bg-gradient-to-r from-white to-gray-100 shadow-lg flex items-center justify-between px-4 overflow-hidden">
-        {/* Track markers */}
-        {[...Array(11)].map((_, i) => (
-          <div
-            key={i}
-            className="absolute h-full w-px bg-gray-300"
-            style={{ left: `${i * 10}%` }}
-          ></div>
+      <select
+        value={subject}
+        onChange={(e) => {
+          setSubject(e.target.value);
+          setIndex(0);
+          setFlipped(false);
+        }}
+        className="mb-6 px-4 py-2 border rounded-lg shadow"
+      >
+        {Object.keys(subjects).map((subj) => (
+          <option key={subj} value={subj}>
+            {subj}
+          </option>
         ))}
+      </select>
 
-        {/* Player (bicycle) */}
+      {/* Flashcard */}
+      <div
+        className={`w-80 h-52 cursor-pointer [perspective:1000px]`}
+        onClick={() => setFlipped(!flipped)}
+      >
         <div
-          className={`absolute text-4xl transition-all duration-700 ${
-            fallen ? "animate-bounce text-red-600" : ""
+          className={`relative w-full h-full transition-transform duration-700 [transform-style:preserve-3d] ${
+            flipped ? "[transform:rotateY(180deg)]" : ""
           }`}
-          style={{ left: `${playerPos * 10}%`, top: "30%" }}
         >
-          🚴
-        </div>
-
-        {/* Pothole */}
-        {pothole !== null && (
-          <div
-            className="absolute text-4xl"
-            style={{ left: `${pothole * 10}%`, bottom: "5%" }}
-          >
-            🕳️
+          {/* Front */}
+          <div className="absolute w-full h-full flex items-center justify-center text-xl font-bold bg-white border-2 border-gray-300 rounded-2xl shadow-lg [backface-visibility:hidden]">
+            {cards[index].front}
           </div>
-        )}
 
-        {/* Finish Flag */}
-        <div className="absolute right-0 text-3xl">🎌</div>
+          {/* Back */}
+          <div className="absolute w-full h-full flex items-center justify-center text-lg bg-indigo-600 text-white border-2 border-indigo-700 rounded-2xl shadow-lg [transform:rotateY(180deg)] [backface-visibility:hidden]">
+            {cards[index].back}
+          </div>
+        </div>
       </div>
 
-      {/* Progress Bar */}
-      <div className="w-full max-w-3xl mt-4 bg-gray-300 rounded-full h-4">
-        <div
-          className="bg-green-600 h-4 rounded-full transition-all duration-500"
-          style={{ width: `${playerPos * 10}%` }}
-        ></div>
+      {/* Navigation */}
+      <div className="flex mt-6 space-x-6">
+        <button
+          onClick={handlePrev}
+          className="px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 shadow"
+        >
+          ⬅ Prev
+        </button>
+        <button
+          onClick={handleNext}
+          className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 shadow"
+        >
+          Next ➡
+        </button>
       </div>
-
-      {/* Question Section */}
-      {!winner && !fallen ? (
-        <div className="mt-8 text-center">
-          <p className="text-lg font-semibold mb-3">{questions[currentQ].q}</p>
-          <input
-            type="text"
-            value={answer}
-            onChange={(e) => setAnswer(e.target.value)}
-            className="border px-3 py-2 rounded-lg"
-            placeholder="Your Answer"
-          />
-          <button
-            onClick={handleSubmit}
-            className="ml-3 px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700"
-          >
-            Submit
-          </button>
-
-          {/* Feedback */}
-          {message && <p className="mt-3 text-md italic">{message}</p>}
-        </div>
-      ) : winner ? (
-        <div className="mt-6 text-xl font-bold">
-          🎉 {winner} reached the finish line!
-          <button
-            onClick={resetGame}
-            className="block mt-4 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700"
-          >
-            Play Again
-          </button>
-        </div>
-      ) : fallen ? (
-        <div className="mt-6 text-xl font-bold text-red-600">
-          💀 You fell in a pothole! Try again.
-          <button
-            onClick={resetGame}
-            className="block mt-4 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700"
-          >
-            Restart Game
-          </button>
-        </div>
-      ) : null}
     </div>
   );
 };
 
-export default KnowledgeRace;
+export default Flashcards;
