@@ -25,7 +25,7 @@ const Routes = () => {
         <Route path="/interactive-learning-studio" element={<InteractiveLearningStudio />} />
         <Route path="/progress-analytics-center" element={<ProgressAnalyticsCenter />} />
         <Route path="/ai-help" element={<AIHelp />} />
-        <Route path="/homepage" element={<Homepage />} />
+         
         <Route path="*" element={<NotFound />} />
       </RouterRoutes>
       </ErrorBoundary>
