@@ -3,50 +3,45 @@ import React, { useState } from "react";
 export default function AuthPage({ onAuthSuccess }) {
   const [isSignUp, setIsSignUp] = useState(false);
   const [signupName, setSignupName] = useState("");
-  const [signupPhone, setSignupPhone] = useState("");
-  const [signupOtp, setSignupOtp] = useState("");
-  const [signinPhone, setSigninPhone] = useState("");
-  const [signinOtp, setSigninOtp] = useState("");
+  const [signupEmail, setSignupEmail] = useState("");
+  const [signupPassword, setSignupPassword] = useState("");
+  const [signinEmail, setSigninEmail] = useState("");
+  const [signinPassword, setSigninPassword] = useState("");
   const [errors, setErrors] = useState({});
 
-  const isValidPhone = (phone) => /^\d{10}$/.test(phone);
-  const isValidOtp = (otp) => /^\d{6}$/.test(otp);
+  const isValidEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 
   const validateSignUp = () => {
     const newErrors = {};
     if (!signupName) newErrors.signupName = "Name is required";
-    if (!signupPhone) newErrors.signupPhone = "Phone number is required";
-    else if (!isValidPhone(signupPhone))
-      newErrors.signupPhone = "Phone number must be 10 digits";
-    if (!signupOtp) newErrors.signupOtp = "OTP is required";
-    else if (!isValidOtp(signupOtp))
-      newErrors.signupOtp = "OTP must be 6 digits";
+    if (!signupEmail) newErrors.signupEmail = "Email is required";
+    else if (!isValidEmail(signupEmail))
+      newErrors.signupEmail = "Invalid email format";
+    if (!signupPassword) newErrors.signupPassword = "Password is required";
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
 
   const validateSignIn = () => {
     const newErrors = {};
-    if (!signinPhone) newErrors.signinPhone = "Phone number is required";
-    else if (!isValidPhone(signinPhone))
-      newErrors.signinPhone = "Phone number must be 10 digits";
-    if (!signinOtp) newErrors.signinOtp = "OTP is required";
-    else if (!isValidOtp(signinOtp))
-      newErrors.signinOtp = "OTP must be 6 digits";
+    if (!signinEmail) newErrors.signinEmail = "Email is required";
+    else if (!isValidEmail(signinEmail))
+      newErrors.signinEmail = "Invalid email format";
+    if (!signinPassword) newErrors.signinPassword = "Password is required";
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
 
   const handleSignUp = () => {
     if (validateSignUp()) {
-      localStorage.setItem("user", JSON.stringify({ phone: signupPhone }));
+      localStorage.setItem("user", JSON.stringify({ email: signupEmail }));
       onAuthSuccess();
     }
   };
 
   const handleSignIn = () => {
     if (validateSignIn()) {
-      localStorage.setItem("user", JSON.stringify({ phone: signinPhone }));
+      localStorage.setItem("user", JSON.stringify({ email: signinEmail }));
       onAuthSuccess();
     }
   };
@@ -71,22 +66,22 @@ export default function AuthPage({ onAuthSuccess }) {
               {errors.signupName && <p className="text-red-500 text-sm mb-2">{errors.signupName}</p>}
 
               <input
-                type="text"
-                placeholder="Phone Number"
+                type="email"
+                placeholder="Email"
                 className="w-full p-4 mb-3 border rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500"
-                value={signupPhone}
-                onChange={(e) => setSignupPhone(e.target.value)}
+                value={signupEmail}
+                onChange={(e) => setSignupEmail(e.target.value)}
               />
-              {errors.signupPhone && <p className="text-red-500 text-sm mb-2">{errors.signupPhone}</p>}
+              {errors.signupEmail && <p className="text-red-500 text-sm mb-2">{errors.signupEmail}</p>}
 
               <input
-                type="text"
-                placeholder="OTP"
+                type="password"
+                placeholder="Password"
                 className="w-full p-4 mb-3 border rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500"
-                value={signupOtp}
-                onChange={(e) => setSignupOtp(e.target.value)}
+                value={signupPassword}
+                onChange={(e) => setSignupPassword(e.target.value)}
               />
-              {errors.signupOtp && <p className="text-red-500 text-sm mb-2">{errors.signupOtp}</p>}
+              {errors.signupPassword && <p className="text-red-500 text-sm mb-2">{errors.signupPassword}</p>}
 
               <button
                 onClick={handleSignUp}
@@ -100,22 +95,22 @@ export default function AuthPage({ onAuthSuccess }) {
               <h2 className="text-3xl font-bold mb-6 text-gray-800">Sign In</h2>
 
               <input
-                type="text"
-                placeholder="Phone Number"
+                type="email"
+                placeholder="Email"
                 className="w-full p-4 mb-3 border rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500"
-                value={signinPhone}
-                onChange={(e) => setSigninPhone(e.target.value)}
+                value={signinEmail}
+                onChange={(e) => setSigninEmail(e.target.value)}
               />
-              {errors.signinPhone && <p className="text-red-500 text-sm mb-2">{errors.signinPhone}</p>}
+              {errors.signinEmail && <p className="text-red-500 text-sm mb-2">{errors.signinEmail}</p>}
 
               <input
-                type="text"
-                placeholder="OTP"
+                type="password"
+                placeholder="Password"
                 className="w-full p-4 mb-3 border rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500"
-                value={signinOtp}
-                onChange={(e) => setSigninOtp(e.target.value)}
+                value={signinPassword}
+                onChange={(e) => setSigninPassword(e.target.value)}
               />
-              {errors.signinOtp && <p className="text-red-500 text-sm mb-2">{errors.signinOtp}</p>}
+              {errors.signinPassword && <p className="text-red-500 text-sm mb-2">{errors.signinPassword}</p>}
 
               <button
                 onClick={handleSignIn}
