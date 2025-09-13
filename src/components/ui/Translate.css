@@ -1,0 +1,35 @@
+/* Hide Google logo and text */
+.goog-logo-link,
+.goog-te-gadget span {
+  display: none !important;
+}
+
+/* Container styling */
+#google_translate_element {
+  display: inline-block;
+  padding: 4px 8px;
+  border: 1px solid var(--border, #ddd);
+  border-radius: 8px;
+  background-color: var(--background, #fff);
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--foreground, #333);
+}
+
+/* Dropdown styling */
+.goog-te-combo {
+  padding: 6px 10px;
+  border-radius: 6px;
+  border: 1px solid var(--border, #ccc);
+  background-color: var(--background, #fff);
+  font-size: 14px;
+  font-family: inherit;
+  color: var(--foreground, #333);
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+}
+
+.goog-te-combo:hover {
+  border-color: var(--primary, #6366f1);
+  box-shadow: 0 0 6px rgba(99, 102, 241, 0.3);
+}
