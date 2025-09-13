@@ -23,7 +23,7 @@ const Header = ({ isCollapsed = false, onToggleSidebar }) => {
     { name: 'Resources', path: '/resource-discovery-center', icon: 'Library' },
     { name: 'Analytics', path: '/progress-analytics-center', icon: 'BarChart3' },
     { name: 'FlashCard' , path: '/flashcardspages'},
-    { name: "Knowledge Race", path: "/knowledge-race", icon: "Gamepad2" },
+    { name: "Knowledge Hunt", path: "/knowledge-race", icon: "Gamepad2" },
 
     
   ];
