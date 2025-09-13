@@ -57,67 +57,95 @@ const KnowledgeRace = () => {
   };
 
   return (
-    <div className="flex flex-col items-center min-h-screen p-6 bg-gradient-to-br from-yellow-100 to-blue-200">
-      <h1 className="text-3xl font-bold mb-4">🏴‍☠️ Treasure Hunt Quiz</h1>
-
-      {!gameOver && !completed && (
-        <div className="w-full max-w-2xl bg-white rounded-2xl shadow-lg p-6 flex flex-col items-center gap-4">
-          <p className="text-lg font-semibold">Turn {turnIndex + 1} / {turns.length}</p>
-          <p className="text-md italic text-gray-700">💡 Choose your path wisely and answer!</p>
-
-          <p className="text-xl font-bold mt-4">{currentTurn.q}</p>
-          <input
-            type="text"
-            value={answer}
-            onChange={(e) => setAnswer(e.target.value)}
-            placeholder="Your answer"
-            className="px-3 py-2 border rounded-lg mt-2 w-64"
-          />
-          <button
-            onClick={handleAnswer}
-            className="mt-4 px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700"
-          >
-            Submit Answer
-          </button>
-        </div>
-      )}
-
-      {completed && (
-        <div className="text-center mt-6 p-6 bg-green-200 rounded-2xl shadow-lg w-full max-w-md">
-          <h2 className="text-3xl font-bold mb-4">🎉 Congratulations! You found the treasure!</h2>
-          {mistakes.length > 0 ? (
-            <div className="text-left">
-              <p className="font-semibold mb-2">Topics to review:</p>
-              <ul className="list-disc ml-5">
-                {mistakes.map((m, i) => (
-                  <li key={i}>{m}</li>
-                ))}
-              </ul>
+    <div className="flex flex-col lg:flex-row min-h-screen p-6 bg-gradient-to-br from-yellow-100 to-blue-200 gap-6">
+      
+      {/* Side Map */}
+      <div className="w-full lg:w-1/4 bg-white rounded-2xl shadow-lg p-4 flex flex-col items-start gap-4">
+        <h2 className="text-xl font-bold mb-2">🗺️ Treasure Map</h2>
+        <div className="flex flex-col gap-3">
+          {turns.map((turn, idx) => (
+            <div key={idx} className="flex items-center gap-2">
+              <div
+                className={`w-6 h-6 rounded-full flex items-center justify-center text-white ${
+                  idx < turnIndex
+                    ? "bg-green-600"
+                    : idx === turnIndex
+                    ? "bg-yellow-500 animate-pulse"
+                    : "bg-gray-400"
+                }`}
+              >
+                {idx + 1}
+              </div>
+              <span className={`text-sm ${idx < turnIndex ? "line-through" : ""}`}>
+                Turn {idx + 1}
+              </span>
             </div>
-          ) : (
-            <p className="text-lg">🏆 Perfect run! You answered everything correctly on the first try!</p>
-          )}
-          <button
-            onClick={resetGame}
-            className="mt-4 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700"
-          >
-            Play Again
-          </button>
+          ))}
         </div>
-      )}
+        <div className="mt-4 text-sm italic text-gray-600">Progress: {turnIndex}/{turns.length}</div>
+      </div>
 
-      {gameOver && (
-        <div className="text-center mt-6 p-6 bg-red-200 rounded-2xl shadow-lg w-full max-w-md">
-          <h2 className="text-2xl font-bold mb-4">💀 Game Over!</h2>
-          <p className="mb-2">You made a mistake in this turn. Try again!</p>
-          <button
-            onClick={resetGame}
-            className="mt-4 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700"
-          >
-            Restart Game
-          </button>
-        </div>
-      )}
+      {/* Main Game Area */}
+      <div className="w-full lg:w-3/4 flex flex-col items-center gap-4">
+        {!gameOver && !completed && (
+          <div className="w-full max-w-2xl bg-white rounded-2xl shadow-lg p-6 flex flex-col items-center gap-4">
+            <p className="text-lg font-semibold">Turn {turnIndex + 1} / {turns.length}</p>
+            <p className="text-md italic text-gray-700">💡 Choose your path wisely and answer!</p>
+
+            <p className="text-xl font-bold mt-4">{currentTurn.q}</p>
+            <input
+              type="text"
+              value={answer}
+              onChange={(e) => setAnswer(e.target.value)}
+              placeholder="Your answer"
+              className="px-3 py-2 border rounded-lg mt-2 w-64"
+            />
+            <button
+              onClick={handleAnswer}
+              className="mt-4 px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700"
+            >
+              Submit Answer
+            </button>
+          </div>
+        )}
+
+        {completed && (
+          <div className="text-center mt-6 p-6 bg-green-200 rounded-2xl shadow-lg w-full max-w-md">
+            <h2 className="text-3xl font-bold mb-4">🎉 Congratulations! You found the treasure!</h2>
+            {mistakes.length > 0 ? (
+              <div className="text-left">
+                <p className="font-semibold mb-2">Topics to review:</p>
+                <ul className="list-disc ml-5">
+                  {mistakes.map((m, i) => (
+                    <li key={i}>{m}</li>
+                  ))}
+                </ul>
+              </div>
+            ) : (
+              <p className="text-lg">🏆 Perfect run! You answered everything correctly on the first try!</p>
+            )}
+            <button
+              onClick={resetGame}
+              className="mt-4 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700"
+            >
+              Play Again
+            </button>
+          </div>
+        )}
+
+        {gameOver && (
+          <div className="text-center mt-6 p-6 bg-red-200 rounded-2xl shadow-lg w-full max-w-md">
+            <h2 className="text-2xl font-bold mb-4">💀 Game Over!</h2>
+            <p className="mb-2">You made a mistake in this turn. Try again!</p>
+            <button
+              onClick={resetGame}
+              className="mt-4 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700"
+            >
+              Restart Game
+            </button>
+          </div>
+        )}
+      </div>
     </div>
   );
 };
