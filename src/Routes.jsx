@@ -9,7 +9,7 @@ import ProgressAnalyticsCenter from './pages/progress-analytics-center';
 import AIHelp from './pages/ai-help';
 import SchoolIntegrationPortal from './pages/school-integration-portal';
 import ResourceDiscoveryCenter from './pages/resource-discovery-center';
-import Homepage from './pages/homepage';
+
 
 const Routes = () => {
   return (
