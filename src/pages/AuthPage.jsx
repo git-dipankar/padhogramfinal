@@ -124,4 +124,39 @@ export default function AuthPage({ onAuthSuccess }) {
 
               <button
                 onClick={handleSignIn}
-                className="mt-5 w-full p-4 bg-purple-600 text-white rounde
+                className="mt-5 w-full p-4 bg-purple-600 text-white rounded-xl hover:bg-purple-700 transition"
+              >
+                Sign In
+              </button>
+            </>
+          )}
+        </div>
+
+        {/* Toggle Panel */}
+        <div className="w-full md:w-1/2 bg-gradient-to-tr from-purple-700 to-pink-500 text-white flex flex-col justify-center items-center p-10">
+          <h2 className="text-3xl font-bold mb-4 text-center">{isSignUp ? "Welcome Back!" : "Hello, Friend!"}</h2>
+          <p className="mb-6 text-center">{isSignUp ? "Sign in to continue" : "Create an account to get started"}</p>
+          <button
+            onClick={() => setIsSignUp(!isSignUp)}
+            className="px-6 py-3 border-2 border-white rounded-full hover:bg-white hover:text-gray-800 transition"
+          >
+            {isSignUp ? "Sign In" : "Sign Up"}
+          </button>
+        </div>
+      </div>
+
+      {/* Gradient animation */}
+      <style jsx>{`
+        @keyframes gradient-x {
+          0% { background-position: 0% 50%; }
+          50% { background-position: 100% 50%; }
+          100% { background-position: 0% 50%; }
+        }
+        .animate-gradient-x {
+          background-size: 200% 200%;
+          animation: gradient-x 10s ease infinite;
+        }
+      `}</style>
+    </div>
+  );
+}
