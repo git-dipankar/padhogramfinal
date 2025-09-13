@@ -56,21 +56,24 @@ const KnowledgeRace = () => {
 
   return (
     <div className="flex flex-col lg:flex-row min-h-screen p-6 bg-gradient-to-br from-yellow-200 to-green-200 gap-6">
-      
       {/* Treasure Map Side */}
-      <div className="w-full lg:w-1/3 bg-yellow-100 rounded-2xl shadow-lg p-6 overflow-y-auto max-h-screen">
+      <div className="w-full lg:w-1/3 bg-yellow-100 rounded-2xl shadow-lg p-6 overflow-y-auto max-h-screen relative">
         <h2 className="text-xl font-bold mb-4">🗺️ Treasure Map</h2>
-
-        <div className="flex flex-col gap-8 relative">
+        <div className="relative flex flex-col items-start gap-20">
           {turns.map((turn, idx) => {
             const isPassed = turnIndex > idx;
             const isCurrent = turnIndex === idx;
             const leftOffset = idx % 2 === 0 ? "0%" : "50%"; // zig-zag
+
             return (
-              <div key={idx} className="flex items-center gap-2 w-full relative" style={{ marginLeft: leftOffset }}>
+              <div
+                key={idx}
+                className="relative flex items-center gap-2 w-full"
+                style={{ marginLeft: leftOffset }}
+              >
                 {/* Node */}
                 <div
-                  className={`w-10 h-10 rounded-full flex items-center justify-center text-white text-lg ${
+                  className={`w-10 h-10 rounded-full flex items-center justify-center text-white text-lg z-10 ${
                     isPassed
                       ? "bg-green-600"
                       : isCurrent
@@ -86,21 +89,30 @@ const KnowledgeRace = () => {
                   Turn {idx + 1}
                 </span>
 
-                {/* Connecting line */}
+                {/* Connecting line using SVG */}
                 {idx < turns.length - 1 && (
-                  <div
-                    className={`absolute h-1 ${turnIndex > idx ? "bg-green-600" : "bg-gray-400"} transition-all duration-500`}
+                  <svg
+                    className="absolute z-0"
                     style={{
                       top: "20px",
-                      left: "20px",
-                      width: "calc(50% - 20px)",
+                      left: "25px",
+                      width: "100%",
+                      height: "80px",
                     }}
-                  />
+                  >
+                    <line
+                      x1="0"
+                      y1="0"
+                      x2={idx % 2 === 0 ? 250 : -250}
+                      y2="80"
+                      stroke={turnIndex > idx ? "green" : "gray"}
+                      strokeWidth="4"
+                    />
+                  </svg>
                 )}
               </div>
             );
           })}
-
           <div className="mt-4 text-sm italic text-gray-600">
             Progress: {turnIndex}/{turns.length}
           </div>
@@ -111,8 +123,12 @@ const KnowledgeRace = () => {
       <div className="w-full lg:w-2/3 flex flex-col items-center gap-4">
         {!gameOver && !completed && (
           <div className="w-full max-w-2xl bg-white rounded-2xl shadow-lg p-6 flex flex-col items-center gap-4">
-            <p className="text-lg font-semibold">Turn {turnIndex + 1} / {turns.length}</p>
-            <p className="text-md italic text-gray-700">💡 Answer correctly to move forward!</p>
+            <p className="text-lg font-semibold">
+              Turn {turnIndex + 1} / {turns.length}
+            </p>
+            <p className="text-md italic text-gray-700">
+              💡 Answer correctly to move forward!
+            </p>
 
             <p className="text-xl font-bold mt-4">{currentTurn.q}</p>
             <input
@@ -133,7 +149,9 @@ const KnowledgeRace = () => {
 
         {completed && (
           <div className="text-center mt-6 p-6 bg-green-200 rounded-2xl shadow-lg w-full max-w-md">
-            <h2 className="text-3xl font-bold mb-4">🎉 Congratulations! You found the treasure!</h2>
+            <h2 className="text-3xl font-bold mb-4">
+              🎉 Congratulations! You found the treasure!
+            </h2>
             {mistakes.length > 0 ? (
               <div className="text-left">
                 <p className="font-semibold mb-2">Topics to review:</p>
@@ -144,7 +162,9 @@ const KnowledgeRace = () => {
                 </ul>
               </div>
             ) : (
-              <p className="text-lg">🏆 Perfect run! You answered everything correctly on the first try!</p>
+              <p className="text-lg">
+                🏆 Perfect run! You answered everything correctly on the first try!
+              </p>
             )}
             <button
               onClick={resetGame}
@@ -158,7 +178,9 @@ const KnowledgeRace = () => {
         {gameOver && (
           <div className="text-center mt-6 p-6 bg-red-200 rounded-2xl shadow-lg w-full max-w-md">
             <h2 className="text-2xl font-bold mb-4">💀 Game Over!</h2>
-            <p className="mb-2">You made a mistake in this turn. Try again!</p>
+            <p className="mb-2">
+              You made a mistake in this turn. Try again!
+            </p>
             <button
               onClick={resetGame}
               className="mt-4 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700"
