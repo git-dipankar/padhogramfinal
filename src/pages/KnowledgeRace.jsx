@@ -1,3 +1,4 @@
+
 import React, { useState } from "react";
 
 const subjects = {
@@ -35,24 +36,25 @@ const KnowledgeRace = () => {
   const [currentQ, setCurrentQ] = useState(0);
   const [answer, setAnswer] = useState("");
   const [winner, setWinner] = useState(null);
-  const [obstacles, setObstacles] = useState([]);
+  const [pothole, setPothole] = useState(null);
+  const [fallen, setFallen] = useState(false);
   const [message, setMessage] = useState("");
 
   const questions = subjects[subject];
 
   const handleSubmit = () => {
-    if (winner) return;
+    if (winner || fallen) return;
 
     const correct =
       answer.trim().toLowerCase() === questions[currentQ].a.toLowerCase();
 
     if (correct) {
-      setMessage("⚡ Boost Speed! Correct Answer!");
-      movePlayer(2); // bigger jump for correct
+      setMessage("⚡ Correct! Speed Boost!");
+      movePlayer(2);
     } else {
-      setMessage("🪨 Oh no! Obstacle appeared!");
-      movePlayer(1); // smaller move
-      addObstacle(playerPos + 1);
+      setMessage("🕳️ Oh no! You fell into a pothole!");
+      setPothole(playerPos + 1);
+      setFallen(true);
     }
 
     setAnswer("");
@@ -69,22 +71,19 @@ const KnowledgeRace = () => {
     });
   };
 
-  const addObstacle = (position) => {
-    setObstacles((prev) => [...prev, position]);
-  };
-
   const resetGame = () => {
     setPlayerPos(0);
     setCurrentQ(0);
     setAnswer("");
     setWinner(null);
     setMessage("");
-    setObstacles([]);
+    setPothole(null);
+    setFallen(false);
   };
 
   return (
-    <div className="flex flex-col items-center p-6 min-h-screen bg-gradient-to-br from-orange-100 to-green-200">
-      <h1 className="text-3xl font-bold mb-6">🏁 Knowledge Race with Obstacles</h1>
+    <div className="flex flex-col items-center p-6 min-h-screen bg-gradient-to-br from-yellow-100 to-blue-200">
+      <h1 className="text-3xl font-bold mb-6">🏁 Knowledge Race with Potholes</h1>
 
       {/* Subject Selector */}
       <div className="mb-6">
@@ -105,7 +104,7 @@ const KnowledgeRace = () => {
       </div>
 
       {/* Track */}
-      <div className="relative w-full max-w-3xl h-32 border-4 border-gray-500 rounded-lg bg-gradient-to-r from-white to-gray-100 shadow-lg flex items-center justify-between px-4 overflow-hidden">
+      <div className="relative w-full max-w-3xl h-32 border-4 border-gray-600 rounded-lg bg-gradient-to-r from-white to-gray-100 shadow-lg flex items-center justify-between px-4 overflow-hidden">
         {/* Track markers */}
         {[...Array(11)].map((_, i) => (
           <div
@@ -117,22 +116,23 @@ const KnowledgeRace = () => {
 
         {/* Player (bicycle) */}
         <div
-          className="absolute text-4xl transition-all duration-700"
+          className={`absolute text-4xl transition-all duration-700 ${
+            fallen ? "animate-bounce text-red-600" : ""
+          }`}
           style={{ left: `${playerPos * 10}%`, top: "30%" }}
         >
           🚴
         </div>
 
-        {/* Obstacles */}
-        {obstacles.map((pos, idx) => (
+        {/* Pothole */}
+        {pothole !== null && (
           <div
-            key={idx}
-            className="absolute text-3xl"
-            style={{ left: `${pos * 10}%`, bottom: "10%" }}
+            className="absolute text-4xl"
+            style={{ left: `${pothole * 10}%`, bottom: "5%" }}
           >
-            🪨
+            🕳️
           </div>
-        ))}
+        )}
 
         {/* Finish Flag */}
         <div className="absolute right-0 text-3xl">🎌</div>
@@ -147,7 +147,7 @@ const KnowledgeRace = () => {
       </div>
 
       {/* Question Section */}
-      {!winner ? (
+      {!winner && !fallen ? (
         <div className="mt-8 text-center">
           <p className="text-lg font-semibold mb-3">{questions[currentQ].q}</p>
           <input
@@ -167,7 +167,7 @@ const KnowledgeRace = () => {
           {/* Feedback */}
           {message && <p className="mt-3 text-md italic">{message}</p>}
         </div>
-      ) : (
+      ) : winner ? (
         <div className="mt-6 text-xl font-bold">
           🎉 {winner} reached the finish line!
           <button
@@ -177,7 +177,17 @@ const KnowledgeRace = () => {
             Play Again
           </button>
         </div>
-      )}
+      ) : fallen ? (
+        <div className="mt-6 text-xl font-bold text-red-600">
+          💀 You fell in a pothole! Try again.
+          <button
+            onClick={resetGame}
+            className="block mt-4 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700"
+          >
+            Restart Game
+          </button>
+        </div>
+      ) : null}
     </div>
   );
 };
