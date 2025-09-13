@@ -8,24 +8,46 @@ const Header = ({ isCollapsed = false, onToggleSidebar }) => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const location = useLocation();
 
+  // ----------------- Scroll Effect -----------------
   useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 10);
-    };
-
+    const handleScroll = () => setIsScrolled(window.scrollY > 10);
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  // ----------------- Google Translate -----------------
+  useEffect(() => {
+    const addGoogleTranslateScript = () => {
+      if (!document.getElementById('google-translate')) {
+        const script = document.createElement('script');
+        script.id = 'google-translate';
+        script.src = "//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit";
+        document.body.appendChild(script);
+
+        window.googleTranslateElementInit = () => {
+          new window.google.translate.TranslateElement(
+            {
+              pageLanguage: 'en',            // default language
+              includedLanguages: 'hi,od',    // Hindi and Odia
+              layout: window.google.translate.TranslateElement.InlineLayout.SIMPLE,
+            },
+            'google_translate_element'       // div ID
+          );
+        };
+      }
+    };
+
+    addGoogleTranslateScript();
+  }, []);
+
+  // ----------------- Navigation Items -----------------
   const navigationItems = [
     { name: 'Learning Studio', path: '/interactive-learning-studio', icon: 'BookOpen' },
     { name: 'AI Companion', path: '/ai-study-companion', icon: 'Bot' },
     { name: 'Resources', path: '/resource-discovery-center', icon: 'Library' },
     { name: 'Analytics', path: '/progress-analytics-center', icon: 'BarChart3' },
-    { name: 'FlashCard' , path: '/flashcardspages'},
-    { name: "Knowledge Hunt", path: "/knowledge-race", icon: "Gamepad2" },
-
-    
+    { name: 'FlashCard', path: '/flashcardspages' },
+    { name: 'Knowledge Hunt', path: '/knowledge-race', icon: 'Gamepad2' },
   ];
 
   const secondaryItems = [
@@ -34,40 +56,21 @@ const Header = ({ isCollapsed = false, onToggleSidebar }) => {
 
   const isActivePath = (path) => location?.pathname === path;
 
-  const handleSignOut = () => { localStorage.removeItem('user'); localStorage.removeItem('coins'); window.location.href = '/'; };
+  const handleSignOut = () => {
+    localStorage.removeItem('user');
+    localStorage.removeItem('coins');
+    window.location.href = '/';
+  };
 
+  // ----------------- Logo Component -----------------
   const Logo = () => (
     <div className="flex items-center space-x-3">
       <div className="relative">
         <div className="w-10 h-10 bg-gradient-to-br from-primary to-accent rounded-xl flex items-center justify-center shadow-soft">
-          <svg
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            className="text-white"
-          >
-            <path
-              d="M12 2L2 7L12 12L22 7L12 2Z"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-            <path
-              d="M2 17L12 22L22 17"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-            <path
-              d="M2 12L12 17L22 12"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" className="text-white">
+            <path d="M12 2L2 7L12 12L22 7L12 2Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+            <path d="M2 17L12 22L22 17" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+            <path d="M2 12L12 17L22 12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
           </svg>
         </div>
         <div className="absolute -top-1 -right-1 w-4 h-4 bg-achievement rounded-full flex items-center justify-center">
@@ -81,99 +84,57 @@ const Header = ({ isCollapsed = false, onToggleSidebar }) => {
     </div>
   );
 
+  // ----------------- Render Header -----------------
   return (
-    <header
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        isScrolled
-          ? 'bg-background/95 backdrop-blur-md border-b border-border shadow-soft'
-          : 'bg-background/80 backdrop-blur-sm'
-      }`}
-    >
+    <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${isScrolled ? 'bg-background/95 backdrop-blur-md border-b border-border shadow-soft' : 'bg-background/80 backdrop-blur-sm'}`}>
       <div className="flex items-center justify-between h-16 px-6">
-        {/* Left Section - Logo and Mobile Menu Toggle */}
+        {/* Left Section - Logo & Mobile Toggle */}
         <div className="flex items-center space-x-4">
-          {/* Mobile Menu Toggle */}
-          <Button
-            variant="ghost"
-            size="icon"
-            className="lg:hidden"
-            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-          >
+          <Button variant="ghost" size="icon" className="lg:hidden" onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}>
             <Icon name={isMobileMenuOpen ? 'X' : 'Menu'} size={20} />
           </Button>
-
-          {/* Desktop Sidebar Toggle */}
           {onToggleSidebar && (
-            <Button
-              variant="ghost"
-              size="icon"
-              className="hidden lg:flex"
-              onClick={onToggleSidebar}
-            >
+            <Button variant="ghost" size="icon" className="hidden lg:flex" onClick={onToggleSidebar}>
               <Icon name={isCollapsed ? 'PanelLeftOpen' : 'PanelLeftClose'} size={20} />
             </Button>
           )}
-
           <Logo />
         </div>
 
         {/* Center Section - Desktop Navigation */}
         <nav className="hidden lg:flex items-center space-x-1">
-          {navigationItems?.map((item) => (
+          {navigationItems.map((item) => (
             <a
-              key={item?.path}
-              href={item?.path}
-              className={`flex items-center space-x-2 px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 hover:bg-muted ${
-                isActivePath(item?.path)
-                  ? 'bg-primary text-primary-foreground shadow-soft'
-                  : 'text-foreground hover:text-primary'
-              }`}
+              key={item.path}
+              href={item.path}
+              className={`flex items-center space-x-2 px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 hover:bg-muted ${isActivePath(item.path) ? 'bg-primary text-primary-foreground shadow-soft' : 'text-foreground hover:text-primary'}`}
             >
-              <Icon name={item?.icon} size={16} />
-              <span>{item?.name}</span>
+              {item.icon && <Icon name={item.icon} size={16} />}
+              <span>{item.name}</span>
             </a>
           ))}
 
           {/* More Menu */}
           <div className="relative group">
-            <Button
-              variant="ghost"
-              size="sm"
-              className="flex items-center space-x-2"
-            >
+            <Button variant="ghost" size="sm" className="flex items-center space-x-2">
               <Icon name="MoreHorizontal" size={16} />
               <span>More</span>
               <Icon name="ChevronDown" size={14} />
             </Button>
-
-            {/* Dropdown Menu */}
             <div className="absolute top-full right-0 mt-2 w-48 bg-popover border border-border rounded-lg shadow-large opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
               <div className="py-2">
-                {secondaryItems?.map((item) => (
-                  <a
-                    key={item?.path}
-                    href={item?.path}
-                    className={`flex items-center space-x-3 px-4 py-2 text-sm hover:bg-muted transition-colors ${
-                      isActivePath(item?.path)
-                        ? 'text-primary font-medium' :'text-popover-foreground'
-                    }`}
-                  >
-                    <Icon name={item?.icon} size={16} />
-                    <span>{item?.name}</span>
+                {secondaryItems.map((item) => (
+                  <a key={item.path} href={item.path} className={`flex items-center space-x-3 px-4 py-2 text-sm hover:bg-muted transition-colors ${isActivePath(item.path) ? 'text-primary font-medium' :'text-popover-foreground'}`}>
+                    <Icon name={item.icon} size={16} />
+                    <span>{item.name}</span>
                   </a>
                 ))}
                 <div className="border-t border-border my-2"></div>
-                <a
-                  href="/settings"
-                  className="flex items-center space-x-3 px-4 py-2 text-sm text-popover-foreground hover:bg-muted transition-colors"
-                >
+                <a href="/settings" className="flex items-center space-x-3 px-4 py-2 text-sm text-popover-foreground hover:bg-muted transition-colors">
                   <Icon name="Settings" size={16} />
                   <span>Settings</span>
                 </a>
-                <a
-                  href="/help"
-                  className="flex items-center space-x-3 px-4 py-2 text-sm text-popover-foreground hover:bg-muted transition-colors"
-                >
+                <a href="/help" className="flex items-center space-x-3 px-4 py-2 text-sm text-popover-foreground hover:bg-muted transition-colors">
                   <Icon name="HelpCircle" size={16} />
                   <span>Help & Support</span>
                 </a>
@@ -182,14 +143,15 @@ const Header = ({ isCollapsed = false, onToggleSidebar }) => {
           </div>
         </nav>
 
-        {/* Right Section - User Actions */}
-        <div className="flex items-center space-x-3">
+        {/* Right Section - Translate, Notifications & Profile */}
+        <div className="flex items-center space-x-4">
+          {/* Google Translate */}
+          <div id="google_translate_element" className="ml-2"></div>
+
           {/* Notifications */}
           <Button variant="ghost" size="icon" className="relative">
             <Icon name="Bell" size={20} />
-            <span className="absolute -top-1 -right-1 w-5 h-5 bg-achievement text-achievement-foreground text-xs rounded-full flex items-center justify-center font-medium">
-              3
-            </span>
+            <span className="absolute -top-1 -right-1 w-5 h-5 bg-achievement text-achievement-foreground text-xs rounded-full flex items-center justify-center font-medium">3</span>
           </Button>
 
           {/* User Profile */}
@@ -204,42 +166,28 @@ const Header = ({ isCollapsed = false, onToggleSidebar }) => {
           </div>
         </div>
       </div>
-      {/* Mobile Navigation Menu */}
+
+      {/* Mobile Menu */}
       {isMobileMenuOpen && (
         <div className="lg:hidden bg-background border-t border-border">
           <nav className="px-6 py-4 space-y-2">
-            {[...navigationItems, ...secondaryItems]?.map((item) => (
+            {[...navigationItems, ...secondaryItems].map((item) => (
               <a
-                key={item?.path}
-                href={item?.path}
-                className={`flex items-center space-x-3 px-4 py-3 rounded-lg text-sm font-medium transition-all duration-200 ${
-                  isActivePath(item?.path)
-                    ? 'bg-primary text-primary-foreground'
-                    : 'text-foreground hover:bg-muted'
-                }`}
+                key={item.path}
+                href={item.path}
+                className={`flex items-center space-x-3 px-4 py-3 rounded-lg text-sm font-medium transition-all duration-200 ${isActivePath(item.path) ? 'bg-primary text-primary-foreground' : 'text-foreground hover:bg-muted'}`}
                 onClick={() => setIsMobileMenuOpen(false)}
               >
-                <Icon name={item?.icon} size={18} />
-                <span>{item?.name}</span>
+                {item.icon && <Icon name={item.icon} size={18} />}
+                <span>{item.name}</span>
               </a>
             ))}
-            
             <div className="border-t border-border my-4"></div>
-            
-            <a
-              href="/settings"
-              className="flex items-center space-x-3 px-4 py-3 rounded-lg text-sm font-medium text-foreground hover:bg-muted transition-all duration-200"
-              onClick={() => setIsMobileMenuOpen(false)}
-            >
+            <a href="/settings" className="flex items-center space-x-3 px-4 py-3 rounded-lg text-sm font-medium text-foreground hover:bg-muted transition-all duration-200" onClick={() => setIsMobileMenuOpen(false)}>
               <Icon name="Settings" size={18} />
               <span>Settings</span>
             </a>
-            
-            <a
-              href="/help"
-              className="flex items-center space-x-3 px-4 py-3 rounded-lg text-sm font-medium text-foreground hover:bg-muted transition-all duration-200"
-              onClick={() => setIsMobileMenuOpen(false)}
-            >
+            <a href="/help" className="flex items-center space-x-3 px-4 py-3 rounded-lg text-sm font-medium text-foreground hover:bg-muted transition-all duration-200" onClick={() => setIsMobileMenuOpen(false)}>
               <Icon name="HelpCircle" size={18} />
               <span>Help & Support</span>
             </a>
