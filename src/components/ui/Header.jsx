@@ -22,7 +22,7 @@ const Header = ({ isCollapsed = false, onToggleSidebar }) => {
     { name: 'AI Companion', path: '/ai-study-companion', icon: 'Bot' },
     { name: 'Resources', path: '/resource-discovery-center', icon: 'Library' },
     { name: 'Analytics', path: '/progress-analytics-center', icon: 'BarChart3' },
-    {path: '/flashcardspages'},
+    { name: 'FlashCard' , path: '/flashcardspages'},
     
   ];
 
