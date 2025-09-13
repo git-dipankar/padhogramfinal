@@ -25,17 +25,14 @@ const KnowledgeRace = () => {
 
   const handleAnswer = () => {
     if (answer.trim().toLowerCase() === currentTurn.a.toLowerCase()) {
-      // correct
       setWrongAttempt(false);
       if (turnIndex + 1 < turns.length) {
         setTurnIndex(turnIndex + 1);
         setAnswer("");
       } else {
-        // treasure reached
         setCompleted(true);
       }
     } else {
-      // wrong
       if (!wrongAttempt) {
         setWrongAttempt(true);
         alert("❌ Wrong answer! You have one more chance!");
@@ -57,36 +54,59 @@ const KnowledgeRace = () => {
   };
 
   return (
-    <div className="flex flex-col lg:flex-row min-h-screen p-6 bg-gradient-to-br from-yellow-100 to-blue-200 gap-6">
+    <div className="flex flex-col lg:flex-row min-h-screen p-6 bg-gradient-to-br from-yellow-200 to-green-200 gap-6">
       
-      {/* Side Map */}
-      <div className="w-full lg:w-1/4 bg-white rounded-2xl shadow-lg p-4 flex flex-col items-start gap-4">
-        <h2 className="text-xl font-bold mb-2">🗺️ Treasure Map</h2>
-        <div className="flex flex-col gap-3">
-          {turns.map((turn, idx) => (
-            <div key={idx} className="flex items-center gap-2">
+      {/* Treasure Map Side */}
+      <div className="w-full lg:w-1/3 bg-yellow-100 rounded-2xl shadow-lg p-6 relative">
+        <h2 className="text-xl font-bold mb-4">🗺️ Treasure Map</h2>
+        <div className="relative h-full flex flex-col justify-start items-center gap-8">
+          {turns.map((turn, idx) => {
+            const leftOffset = idx % 2 === 0 ? "0%" : "50%"; // zig-zag
+            return (
               <div
-                className={`w-6 h-6 rounded-full flex items-center justify-center text-white ${
-                  idx < turnIndex
-                    ? "bg-green-600"
-                    : idx === turnIndex
-                    ? "bg-yellow-500 animate-pulse"
-                    : "bg-gray-400"
-                }`}
+                key={idx}
+                className="flex items-center gap-2 absolute transition-all duration-500"
+                style={{ top: `${idx * 80}px`, left: leftOffset }}
               >
-                {idx + 1}
+                <div
+                  className={`w-10 h-10 rounded-full flex items-center justify-center text-white text-lg ${
+                    idx < turnIndex
+                      ? "bg-green-600"
+                      : idx === turnIndex
+                      ? "bg-yellow-500 animate-bounce"
+                      : "bg-gray-400"
+                  }`}
+                >
+                  {idx === turns.length - 1 ? "💰" : "🏝️"}
+                </div>
+                <span className={`font-medium ${idx < turnIndex ? "line-through" : ""}`}>
+                  Turn {idx + 1}
+                </span>
               </div>
-              <span className={`text-sm ${idx < turnIndex ? "line-through" : ""}`}>
-                Turn {idx + 1}
-              </span>
-            </div>
-          ))}
+            );
+          })}
+
+          {/* Connecting Paths */}
+          {turns.slice(0, -1).map((_, idx) => {
+            const left1 = idx % 2 === 0 ? 20 : 70;
+            const left2 = (idx + 1) % 2 === 0 ? 20 : 70;
+            return (
+              <div
+                key={idx}
+                className="absolute h-0.5 bg-brown-600"
+                style={{
+                  top: `${idx * 80 + 20}px`,
+                  left: `${left1}px`,
+                  width: `${Math.abs(left2 - left1)}px`,
+                }}
+              />
+            );
+          })}
         </div>
-        <div className="mt-4 text-sm italic text-gray-600">Progress: {turnIndex}/{turns.length}</div>
       </div>
 
       {/* Main Game Area */}
-      <div className="w-full lg:w-3/4 flex flex-col items-center gap-4">
+      <div className="w-full lg:w-2/3 flex flex-col items-center gap-4">
         {!gameOver && !completed && (
           <div className="w-full max-w-2xl bg-white rounded-2xl shadow-lg p-6 flex flex-col items-center gap-4">
             <p className="text-lg font-semibold">Turn {turnIndex + 1} / {turns.length}</p>
