@@ -90,13 +90,14 @@ const KnowledgeRace = () => {
           {turns.slice(0, -1).map((_, idx) => {
             const left1 = idx % 2 === 0 ? 20 : 70;
             const left2 = (idx + 1) % 2 === 0 ? 20 : 70;
+            const isPassed = turnIndex > idx; // highlight path if passed
             return (
               <div
                 key={idx}
-                className="absolute h-0.5 bg-brown-600"
+                className={`absolute h-0.5 ${isPassed ? "bg-green-600" : "bg-gray-400"} transition-all duration-500`}
                 style={{
                   top: `${idx * 80 + 20}px`,
-                  left: `${left1}px`,
+                  left: `${Math.min(left1, left2)}px`,
                   width: `${Math.abs(left2 - left1)}px`,
                 }}
               />
