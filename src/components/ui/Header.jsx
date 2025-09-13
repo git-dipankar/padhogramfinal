@@ -18,7 +18,6 @@ const Header = ({ isCollapsed = false, onToggleSidebar }) => {
   }, []);
 
   const navigationItems = [
-    { name: 'Home', path: '/homepage', icon: 'Home' },
     { name: 'Learning Studio', path: '/interactive-learning-studio', icon: 'BookOpen' },
     { name: 'AI Companion', path: '/ai-study-companion', icon: 'Bot' },
     { name: 'Resources', path: '/resource-discovery-center', icon: 'Library' },
