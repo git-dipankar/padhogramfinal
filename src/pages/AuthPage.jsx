@@ -8,7 +8,6 @@ export default function AuthPage({ onAuthSuccess }) {
   const [signinPhone, setSigninPhone] = useState("");
   const [signinOtp, setSigninOtp] = useState("");
   const [errors, setErrors] = useState({});
-  const [otpSent, setOtpSent] = useState(false);
 
   const isValidPhone = (phone) => /^\d{10}$/.test(phone);
   const isValidOtp = (otp) => /^\d{6}$/.test(otp);
@@ -40,20 +39,14 @@ export default function AuthPage({ onAuthSuccess }) {
 
   const handleSignUp = () => {
     if (validateSignUp()) {
-      localStorage.setItem(
-        "user",
-        JSON.stringify({ phone: signupPhone })
-      );
+      localStorage.setItem("user", JSON.stringify({ phone: signupPhone }));
       onAuthSuccess();
     }
   };
 
   const handleSignIn = () => {
     if (validateSignIn()) {
-      localStorage.setItem(
-        "user",
-        JSON.stringify({ phone: signinPhone })
-      );
+      localStorage.setItem("user", JSON.stringify({ phone: signinPhone }));
       onAuthSuccess();
     }
   };
@@ -67,6 +60,7 @@ export default function AuthPage({ onAuthSuccess }) {
           {isSignUp ? (
             <>
               <h2 className="text-3xl font-bold mb-6 text-gray-800">Sign Up</h2>
+
               <input
                 type="text"
                 placeholder="Name"
@@ -75,7 +69,7 @@ export default function AuthPage({ onAuthSuccess }) {
                 onChange={(e) => setSignupName(e.target.value)}
               />
               {errors.signupName && <p className="text-red-500 text-sm mb-2">{errors.signupName}</p>}
-              
+
               <input
                 type="text"
                 placeholder="Phone Number"
@@ -104,6 +98,7 @@ export default function AuthPage({ onAuthSuccess }) {
           ) : (
             <>
               <h2 className="text-3xl font-bold mb-6 text-gray-800">Sign In</h2>
+
               <input
                 type="text"
                 placeholder="Phone Number"
@@ -134,8 +129,12 @@ export default function AuthPage({ onAuthSuccess }) {
 
         {/* Toggle Panel */}
         <div className="w-full md:w-1/2 bg-gradient-to-tr from-purple-700 to-pink-500 text-white flex flex-col justify-center items-center p-10">
-          <h2 className="text-3xl font-bold mb-4 text-center">{isSignUp ? "Welcome Back!" : "Hello, Friend!"}</h2>
-          <p className="mb-6 text-center">{isSignUp ? "Sign in to continue" : "Create an account to get started"}</p>
+          <h2 className="text-3xl font-bold mb-4 text-center">
+            {isSignUp ? "Welcome Back!" : "Hello, Friend!"}
+          </h2>
+          <p className="mb-6 text-center">
+            {isSignUp ? "Sign in to continue" : "Create an account to get started"}
+          </p>
           <button
             onClick={() => setIsSignUp(!isSignUp)}
             className="px-6 py-3 border-2 border-white rounded-full hover:bg-white hover:text-gray-800 transition"
