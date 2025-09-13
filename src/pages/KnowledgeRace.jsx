@@ -27,32 +27,6 @@ const subjects = {
     { q: "Force formula?", a: "F=ma" },
     { q: "Acceleration due to gravity (m/s²)?", a: "9.8" },
   ],
-  English: [
-    { q: "Past tense of 'go'?", a: "went" },
-    { q: "Plural of 'mouse'?", a: "mice" },
-    { q: "Opposite of 'hot'?", a: "cold" },
-    { q: "Synonym of 'happy'?", a: "joyful" },
-    { q: "Antonym of 'big'?", a: "small" },
-    { q: "Fill in: She ___ eating.", a: "is" },
-    { q: "Adjective in 'red car'?", a: "red" },
-    { q: "Noun in 'The boy runs'?", a: "boy" },
-    { q: "Past tense of 'eat'?", a: "ate" },
-    { q: "Plural of 'child'?", a: "children" },
-    { q: "Verb in 'Birds fly'?", a: "fly" },
-  ],
-  Geography: [
-    { q: "Capital of India?", a: "Delhi" },
-    { q: "Largest ocean?", a: "Pacific" },
-    { q: "Tallest mountain?", a: "Everest" },
-    { q: "River flowing through Egypt?", a: "Nile" },
-    { q: "Continent of Sahara desert?", a: "Africa" },
-    { q: "Country known as Land of Rising Sun?", a: "Japan" },
-    { q: "Capital of Odisha?", a: "Bhubaneswar" },
-    { q: "Largest country (area)?", a: "Russia" },
-    { q: "Smallest country?", a: "Vatican" },
-    { q: "Indian state with longest coastline?", a: "Gujarat" },
-    { q: "Planet with rings?", a: "Saturn" },
-  ],
 };
 
 const KnowledgeRace = () => {
@@ -61,6 +35,7 @@ const KnowledgeRace = () => {
   const [currentQ, setCurrentQ] = useState(0);
   const [answer, setAnswer] = useState("");
   const [winner, setWinner] = useState(null);
+  const [obstacles, setObstacles] = useState([]);
   const [message, setMessage] = useState("");
 
   const questions = subjects[subject];
@@ -73,18 +48,29 @@ const KnowledgeRace = () => {
 
     if (correct) {
       setMessage("⚡ Boost Speed! Correct Answer!");
+      movePlayer(2); // bigger jump for correct
     } else {
-      setMessage("🐌 Slow Down… Wrong Answer!");
+      setMessage("🪨 Oh no! Obstacle appeared!");
+      movePlayer(1); // smaller move
+      addObstacle(playerPos + 1);
     }
-
-    setPlayerPos((prev) => {
-      const newPos = prev + (correct ? 2 : 1);
-      if (newPos >= 10) setWinner("You");
-      return Math.min(newPos, 10);
-    });
 
     setAnswer("");
     setCurrentQ((prev) => (prev + 1) % questions.length);
+  };
+
+  const movePlayer = (steps) => {
+    setPlayerPos((prev) => {
+      const newPos = prev + steps;
+      if (newPos >= 10) {
+        setWinner("You");
+      }
+      return Math.min(newPos, 10);
+    });
+  };
+
+  const addObstacle = (position) => {
+    setObstacles((prev) => [...prev, position]);
   };
 
   const resetGame = () => {
@@ -93,11 +79,12 @@ const KnowledgeRace = () => {
     setAnswer("");
     setWinner(null);
     setMessage("");
+    setObstacles([]);
   };
 
   return (
-    <div className="flex flex-col items-center p-6 min-h-screen bg-gradient-to-br from-yellow-100 to-green-200">
-      <h1 className="text-3xl font-bold mb-6">🏁 Knowledge Race</h1>
+    <div className="flex flex-col items-center p-6 min-h-screen bg-gradient-to-br from-orange-100 to-green-200">
+      <h1 className="text-3xl font-bold mb-6">🏁 Knowledge Race with Obstacles</h1>
 
       {/* Subject Selector */}
       <div className="mb-6">
@@ -118,7 +105,7 @@ const KnowledgeRace = () => {
       </div>
 
       {/* Track */}
-      <div className="relative w-full max-w-3xl h-24 border-4 border-gray-500 rounded-lg bg-gradient-to-r from-white to-gray-100 shadow-lg flex items-center justify-between px-4">
+      <div className="relative w-full max-w-3xl h-32 border-4 border-gray-500 rounded-lg bg-gradient-to-r from-white to-gray-100 shadow-lg flex items-center justify-between px-4 overflow-hidden">
         {/* Track markers */}
         {[...Array(11)].map((_, i) => (
           <div
@@ -128,16 +115,27 @@ const KnowledgeRace = () => {
           ></div>
         ))}
 
-        {/* Player */}
+        {/* Player (bicycle) */}
         <div
-          className="absolute text-3xl transition-all duration-500"
-          style={{ left: `${playerPos * 10}%`, top: "25%" }}
+          className="absolute text-4xl transition-all duration-700"
+          style={{ left: `${playerPos * 10}%`, top: "30%" }}
         >
           🚴
         </div>
 
+        {/* Obstacles */}
+        {obstacles.map((pos, idx) => (
+          <div
+            key={idx}
+            className="absolute text-3xl"
+            style={{ left: `${pos * 10}%`, bottom: "10%" }}
+          >
+            🪨
+          </div>
+        ))}
+
         {/* Finish Flag */}
-        <div className="absolute right-0 text-2xl">🎌</div>
+        <div className="absolute right-0 text-3xl">🎌</div>
       </div>
 
       {/* Progress Bar */}
