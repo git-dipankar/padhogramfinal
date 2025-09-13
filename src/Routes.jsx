@@ -10,6 +10,8 @@ import AIHelp from './pages/ai-help';
 import SchoolIntegrationPortal from './pages/school-integration-portal';
 import ResourceDiscoveryCenter from './pages/resource-discovery-center';
 import FlashcardsPages from './pages/flashcardspages'; // ✅ add this
+import KnowledgeRace from "./pages/KnowledgeRace";
+
 
 const Routes = () => {
   return (
@@ -27,6 +29,7 @@ const Routes = () => {
 
           {/* ✅ New Flashcards route */}
           <Route path="/flashcardspages" element={<FlashcardsPages />} />
+          <Route path="/knowledge-race" element={<KnowledgeRace />} />
 
           <Route path="*" element={<NotFound />} />
         </RouterRoutes>
