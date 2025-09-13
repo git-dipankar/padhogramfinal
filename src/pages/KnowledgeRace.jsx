@@ -11,6 +11,7 @@ const turns = [
   { q: "Boiling point of water?", a: "100" },
   { q: "Derivative of x²?", a: "2x" },
   { q: "Plural of Child?", a: "Children" },
+  { q: "Chemical symbol of Water?", a: "H2O" },
 ];
 
 const KnowledgeRace = () => {
@@ -57,52 +58,52 @@ const KnowledgeRace = () => {
     <div className="flex flex-col lg:flex-row min-h-screen p-6 bg-gradient-to-br from-yellow-200 to-green-200 gap-6">
       
       {/* Treasure Map Side */}
-      <div className="w-full lg:w-1/3 bg-yellow-100 rounded-2xl shadow-lg p-6 relative">
+      <div className="w-full lg:w-1/3 bg-yellow-100 rounded-2xl shadow-lg p-6 overflow-y-auto max-h-screen">
         <h2 className="text-xl font-bold mb-4">🗺️ Treasure Map</h2>
-        <div className="relative h-full flex flex-col justify-start items-center gap-8">
+
+        <div className="flex flex-col gap-8 relative">
           {turns.map((turn, idx) => {
+            const isPassed = turnIndex > idx;
+            const isCurrent = turnIndex === idx;
             const leftOffset = idx % 2 === 0 ? "0%" : "50%"; // zig-zag
             return (
-              <div
-                key={idx}
-                className="flex items-center gap-2 absolute transition-all duration-500"
-                style={{ top: `${idx * 80}px`, left: leftOffset }}
-              >
+              <div key={idx} className="flex items-center gap-2 w-full relative" style={{ marginLeft: leftOffset }}>
+                {/* Node */}
                 <div
                   className={`w-10 h-10 rounded-full flex items-center justify-center text-white text-lg ${
-                    idx < turnIndex
+                    isPassed
                       ? "bg-green-600"
-                      : idx === turnIndex
+                      : isCurrent
                       ? "bg-yellow-500 animate-bounce"
                       : "bg-gray-400"
                   }`}
                 >
                   {idx === turns.length - 1 ? "💰" : "🏝️"}
                 </div>
-                <span className={`font-medium ${idx < turnIndex ? "line-through" : ""}`}>
+
+                {/* Label */}
+                <span className={`font-medium ${isPassed ? "line-through" : ""}`}>
                   Turn {idx + 1}
                 </span>
+
+                {/* Connecting line */}
+                {idx < turns.length - 1 && (
+                  <div
+                    className={`absolute h-1 ${turnIndex > idx ? "bg-green-600" : "bg-gray-400"} transition-all duration-500`}
+                    style={{
+                      top: "20px",
+                      left: "20px",
+                      width: "calc(50% - 20px)",
+                    }}
+                  />
+                )}
               </div>
             );
           })}
 
-          {/* Connecting Paths */}
-          {turns.slice(0, -1).map((_, idx) => {
-            const left1 = idx % 2 === 0 ? 20 : 70;
-            const left2 = (idx + 1) % 2 === 0 ? 20 : 70;
-            const isPassed = turnIndex > idx; // highlight path if passed
-            return (
-              <div
-                key={idx}
-                className={`absolute h-0.5 ${isPassed ? "bg-green-600" : "bg-gray-400"} transition-all duration-500`}
-                style={{
-                  top: `${idx * 80 + 20}px`,
-                  left: `${Math.min(left1, left2)}px`,
-                  width: `${Math.abs(left2 - left1)}px`,
-                }}
-              />
-            );
-          })}
+          <div className="mt-4 text-sm italic text-gray-600">
+            Progress: {turnIndex}/{turns.length}
+          </div>
         </div>
       </div>
 
@@ -111,7 +112,7 @@ const KnowledgeRace = () => {
         {!gameOver && !completed && (
           <div className="w-full max-w-2xl bg-white rounded-2xl shadow-lg p-6 flex flex-col items-center gap-4">
             <p className="text-lg font-semibold">Turn {turnIndex + 1} / {turns.length}</p>
-            <p className="text-md italic text-gray-700">💡 Choose your path wisely and answer!</p>
+            <p className="text-md italic text-gray-700">💡 Answer correctly to move forward!</p>
 
             <p className="text-xl font-bold mt-4">{currentTurn.q}</p>
             <input
