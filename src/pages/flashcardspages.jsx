@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-const FlashcardsPage = () => {
+const FlashcardsPages = () => {
   // Math & Science Flashcards
   const mathFlashcards = [
     { question: "Quadratic Formula", answer: "x = (-b ± √(b² - 4ac)) / 2a" },
@@ -81,5 +81,5 @@ const FlashcardsPage = () => {
   );
 };
 
-export default FlashcardsPage;
+export default FlashcardsPages;
 
