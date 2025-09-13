@@ -74,7 +74,10 @@ const Flashcards = () => {
 
   return (
     <div className="flex flex-col items-center min-h-screen p-6 bg-gradient-to-r from-blue-200 to-green-200">
-      <h1 className="text-3xl font-bold mb-6">📚 Flashcards</h1>
+      <h1 className="text-3xl font-bold mb-2">📚 Flashcards</h1>
+      <p className="text-md italic text-gray-700 mb-6">
+        💡 Guess it first... then flip it!
+      </p>
 
       {/* Subject Selector */}
       <select
@@ -95,7 +98,7 @@ const Flashcards = () => {
 
       {/* Flashcard */}
       <div
-        className={`w-80 h-52 cursor-pointer [perspective:1000px]`}
+        className="w-80 h-52 cursor-pointer [perspective:1000px]"
         onClick={() => setFlipped(!flipped)}
       >
         <div
