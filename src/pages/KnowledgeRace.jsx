@@ -61,6 +61,7 @@ const KnowledgeRace = () => {
   const [currentQ, setCurrentQ] = useState(0);
   const [answer, setAnswer] = useState("");
   const [winner, setWinner] = useState(null);
+  const [message, setMessage] = useState("");
 
   const questions = subjects[subject];
 
@@ -69,6 +70,12 @@ const KnowledgeRace = () => {
 
     const correct =
       answer.trim().toLowerCase() === questions[currentQ].a.toLowerCase();
+
+    if (correct) {
+      setMessage("⚡ Boost Speed! Correct Answer!");
+    } else {
+      setMessage("🐌 Slow Down… Wrong Answer!");
+    }
 
     setPlayerPos((prev) => {
       const newPos = prev + (correct ? 2 : 1);
@@ -85,6 +92,7 @@ const KnowledgeRace = () => {
     setCurrentQ(0);
     setAnswer("");
     setWinner(null);
+    setMessage("");
   };
 
   return (
@@ -95,7 +103,10 @@ const KnowledgeRace = () => {
       <div className="mb-6">
         <select
           value={subject}
-          onChange={(e) => resetGame(setSubject(e.target.value))}
+          onChange={(e) => {
+            setSubject(e.target.value);
+            resetGame();
+          }}
           className="px-4 py-2 border rounded-lg"
         >
           {Object.keys(subjects).map((subj) => (
@@ -107,13 +118,34 @@ const KnowledgeRace = () => {
       </div>
 
       {/* Track */}
-      <div className="relative w-full max-w-2xl h-20 border-2 border-gray-400 rounded-lg bg-white shadow-md flex items-center justify-between px-4">
+      <div className="relative w-full max-w-3xl h-24 border-4 border-gray-500 rounded-lg bg-gradient-to-r from-white to-gray-100 shadow-lg flex items-center justify-between px-4">
+        {/* Track markers */}
+        {[...Array(11)].map((_, i) => (
+          <div
+            key={i}
+            className="absolute h-full w-px bg-gray-300"
+            style={{ left: `${i * 10}%` }}
+          ></div>
+        ))}
+
+        {/* Player */}
         <div
-          className="absolute text-2xl transition-all duration-500"
-          style={{ left: `${playerPos * 10}%`, top: "20px" }}
+          className="absolute text-3xl transition-all duration-500"
+          style={{ left: `${playerPos * 10}%`, top: "25%" }}
         >
           🚴
         </div>
+
+        {/* Finish Flag */}
+        <div className="absolute right-0 text-2xl">🎌</div>
+      </div>
+
+      {/* Progress Bar */}
+      <div className="w-full max-w-3xl mt-4 bg-gray-300 rounded-full h-4">
+        <div
+          className="bg-green-600 h-4 rounded-full transition-all duration-500"
+          style={{ width: `${playerPos * 10}%` }}
+        ></div>
       </div>
 
       {/* Question Section */}
@@ -133,6 +165,9 @@ const KnowledgeRace = () => {
           >
             Submit
           </button>
+
+          {/* Feedback */}
+          {message && <p className="mt-3 text-md italic">{message}</p>}
         </div>
       ) : (
         <div className="mt-6 text-xl font-bold">
