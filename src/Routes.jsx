@@ -13,7 +13,8 @@ import ResourceDiscoveryCenter from './pages/resource-discovery-center';
 import FlashcardsPages from './pages/flashcardspages';
 import KnowledgeRace from "./pages/KnowledgeRace";
 
-import Layout from './Layout'; // ✅ Import the layout
+import Layout from './components/Layout';
+
 
 const Routes = () => {
   return (
